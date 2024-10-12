@@ -146,11 +146,36 @@ router.get("/bulk", async (req, res) => {
 
     res.json({
         user: users.map(user => ({
-            username: user.username,
-            firstName: user.firstName,
-            lastName: user.lastName,
+            username: user.username.toUpperCase(),
+            firstName: user.firstName.toUpperCase(),
+            lastName: user.lastName.toUpperCase(),
             _id: user._id
         }))
     })
 })
+
+router.get("/info" ,async (req,res)=>{
+    const token = req.query.token;
+    // console.log( token)
+    try {
+        // console.log("hello")
+        const decoded = jwt.verify(token, JWT_SECRET);
+        let _id = decoded.userId
+        const data = await User.findOne({_id})
+        // console.log(data.firstName , )
+        const info = {
+            "firstName":data.firstName.toUpperCase() ,
+            "lastName":data.lastName.toUpperCase(),
+            "username":data.username,
+            "userId": _id
+        }
+        res.json(info)
+    } catch (error) {
+        console.log("decode error")
+        res.json("error")
+    }
+    
+})
+
+
 module.exports = router;

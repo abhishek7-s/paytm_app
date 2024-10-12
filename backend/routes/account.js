@@ -14,7 +14,7 @@ router.get('/bulk', async (req,res)=>{
 })
 
 router.get('/balance', async (req,res)=>{
-    const userId = req.body.userId
+    const userId = req.query.userId
     console.log(userId)
     const data = await Account.findOne({userId})
     res.json(data.balance)
